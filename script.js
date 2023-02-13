@@ -1,25 +1,57 @@
-const sliderImages = document.querySelectorAll('.slider-image');
-const previousButton = document.querySelector('.previous-button');
-const nextButton = document.querySelector('.next-button');
+const sliderImage = document.querySelector("#slider-image");
 
-let currentImageIndex = 0;
+async function getImage() {
+  const response = await fetch("https://random.imagecdn.app/500/150");
+  const blob = await response.blob();
+  const imageUrl = URL.createObjectURL(blob);
+  sliderImage.src = imageUrl;
+}
 
-sliderImages[currentImageIndex].style.opacity = 1;
-
-previousButton.addEventListener('click', () => {
-  sliderImages[currentImageIndex].style.opacity = 0;
-  currentImageIndex--;
-  if (currentImageIndex < 0) {
-    currentImageIndex = sliderImages.length - 1;
-  }
-  sliderImages[currentImageIndex].style.opacity = 1;
+getImage();
+setInterval(getImage, 5000);
+let nextBtn = document.querySelector("#next");
+let prevBtn = document.querySelector("#prev");
+let slides = document.querySelectorAll(".slide");
+let changeSlide = 0;
+// console.log(changeSlide);
+nextBtn.addEventListener("click", function() {
+  
+    slides.forEach(function (slide, index) {
+    if (slide.classList.contains("show") === true) {
+      changeSlide = index + 1;
+      slide.classList.remove("show");
+    }
+    
+  });
+//   console.log(changeSlide);
+  if (changeSlide < slides.length) {
+    slides[changeSlide].classList.add("show");
+    }
+  else {
+      changeSlide = 0;
+      slides[changeSlide].classList.add("show");
+    }
 });
+// console.log(changeSlide);
+prevBtn.addEventListener('click', function () {
+   
+    slides.forEach(function (slide, index) {
+        if (slide.classList.contains("show") === true) {
+            changeSlide = index - 1;
+            slide.classList.remove("show");
+        }
+       
+        
+    });
+    // console.log(changeSlide);
 
-nextButton.addEventListener('click', () => {
-  sliderImages[currentImageIndex].style.opacity = 0;
-  currentImageIndex++;
-  if (currentImageIndex > sliderImages.length - 1) {
-    currentImageIndex = 0;
-  }
-  sliderImages[currentImageIndex].style.opacity = 1;
+    if (changeSlide < slides.length && changeSlide > -1) {
+        slides[changeSlide].classList.add("show");
+    }
+    else {
+        // console.log(slides.length);
+        
+        changeSlide = slides.length - 1;
+        slides[changeSlide].classList.add("show");
+    }
 });
